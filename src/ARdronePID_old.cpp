@@ -1026,7 +1026,7 @@ int main(int argc, char **argv)
     sig_1.Initialize(SquareWaveTime,SquareWaveAmplitude,SquareWaveFrequency,Control_Rate);
     vertial_signal.Initialize(SquareWaveTime,SquareWaveAmplitude,SquareWaveFrequency,Control_Rate);
   // Initialize ros node
-    ros::init(argc, argv, "ARdronePID");
+    ros::init(argc, argv, "ARdronePID_old");
     ros::NodeHandle n;
     // Initialize OptiTrack System
     OptiTrackFeedback OpTiFeedback;

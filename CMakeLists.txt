@@ -64,16 +64,17 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## Generate actions in the 'action' folder
 # add_action_files(
-#   FILES
+#  FILES
 #   Action1.action
 #   Action2.action
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   geometry_msgs#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   geometry_msgs
+   std_msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -109,6 +110,7 @@ catkin_package(
 #  LIBRARIES ARdronePIDOptiTrack
 #  CATKIN_DEPENDS ardrone_autonomy geometry_msgs roscpp rospy std_msgs
 #  DEPENDS system_lib
+  CATKIN_DEPENDS message_runtime
 )
 
 ###########
@@ -199,3 +201,7 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(ARdronePID_old src/ARdronePID_old.cpp)
+target_link_libraries(ARdronePID_old ${catkin_LIBRARIES})
+add_dependencies(ARdronePID_old ARdronePIDOptiTrack_generate_messages_cpp)
