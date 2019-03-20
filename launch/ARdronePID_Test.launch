@@ -16,5 +16,5 @@
  #- SecondTracker
  </rosparam>
  </node>
- <node pkg = "ARdronePIDOptiTrack" name = "ARdronePID_old" type = "ARdronePID_old" output="screen"/>
+ <node pkg = "ARdronePIDOptiTrack" name = "ARdronePID" type = "ardrone_pid_v1" output="screen"/>
 </launch>

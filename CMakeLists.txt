@@ -202,6 +202,6 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(ARdronePID_old src/ARdronePID_old.cpp)
-target_link_libraries(ARdronePID_old ${catkin_LIBRARIES})
-add_dependencies(ARdronePID_old ARdronePIDOptiTrack_generate_messages_cpp)
+add_executable(ardrone_pid_v1 src/ARdronePID_old.cpp)
+target_link_libraries(ardrone_pid_v1 ${catkin_LIBRARIES})
+add_dependencies(ardrone_pid_v1 ARdronePIDOptiTrack_generate_messages_cpp)
