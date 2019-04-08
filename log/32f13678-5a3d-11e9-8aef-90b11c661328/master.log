@@ -1,0 +1,64 @@
+[rosmaster.main][INFO] 2019-04-08 16:30:56,737: initialization complete, waiting for shutdown
+[rosmaster.main][INFO] 2019-04-08 16:30:56,737: Starting ROS Master Node
+[xmlrpc][INFO] 2019-04-08 16:30:56,738: XML-RPC server binding to 0.0.0.0:11311
+[xmlrpc][INFO] 2019-04-08 16:30:56,738: Started XML-RPC server [http://fscmontreal:11311/]
+[rosmaster.master][INFO] 2019-04-08 16:30:56,739: Master initialized: port[11311], uri[http://fscmontreal:11311/]
+[xmlrpc][INFO] 2019-04-08 16:30:56,739: xml rpc node: starting XML-RPC server
+[rosmaster.master][INFO] 2019-04-08 16:30:56,787: +PARAM [/run_id] by /roslaunch
+[rosmaster.master][INFO] 2019-04-08 16:30:56,788: +PARAM [/roslaunch/uris/host_fscmontreal__36542] by /roslaunch
+[rosmaster.master][INFO] 2019-04-08 16:30:56,894: +PARAM [/rosdistro] by /roslaunch
+[rosmaster.master][INFO] 2019-04-08 16:30:56,895: +PARAM [/vrpn_client_node/use_server_time] by /roslaunch
+[rosmaster.master][INFO] 2019-04-08 16:30:56,895: +PARAM [/vrpn_client_node/refresh_tracker_frequency] by /roslaunch
+[rosmaster.master][INFO] 2019-04-08 16:30:56,895: +PARAM [/vrpn_client_node/port] by /roslaunch
+[rosmaster.master][INFO] 2019-04-08 16:30:56,895: +PARAM [/vrpn_client_node/broadcast_tf] by /roslaunch
+[rosmaster.master][INFO] 2019-04-08 16:30:56,895: +PARAM [/vrpn_client_node/frame_id] by /roslaunch
+[rosmaster.master][INFO] 2019-04-08 16:30:56,896: +PARAM [/vrpn_client_node/server] by /roslaunch
+[rosmaster.master][INFO] 2019-04-08 16:30:56,896: +PARAM [/rosversion] by /roslaunch
+[rosmaster.master][INFO] 2019-04-08 16:30:56,896: +PARAM [/vrpn_client_node/update_frequency] by /roslaunch
+[rosmaster.master][INFO] 2019-04-08 16:30:57,596: +SERVICE [/rosout/get_loggers] /rosout http://fscmontreal:39409/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,597: +PUB [/rosout] /vrpn_client_node http://fscmontreal:40187/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,598: +PUB [/rosout] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,599: +SERVICE [/rosout/set_logger_level] /rosout http://fscmontreal:39409/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,600: +SERVICE [/vrpn_client_node/get_loggers] /vrpn_client_node http://fscmontreal:40187/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,601: +SERVICE [/ARdronePID/get_loggers] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,602: +SERVICE [/vrpn_client_node/set_logger_level] /vrpn_client_node http://fscmontreal:40187/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,603: +PUB [/rosout_agg] /rosout http://fscmontreal:39409/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,604: +SERVICE [/ARdronePID/set_logger_level] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,615: +SUB [/rosout] /rosout http://fscmontreal:39409/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,616: +SUB [/vrpn_client_node/ARdrone/pose] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,617: +PUB [/ardrone/takeoff] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,618: +PUB [/ardrone/land] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,619: +PUB [/ardrone/reset] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,620: +PUB [/cmd_vel] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:30:57,624: +SUB [/ardrone/navdata] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:30:58,652: +PUB [/vrpn_client_node/ARdrone/pose] /vrpn_client_node http://fscmontreal:40187/
+[rosmaster.master][INFO] 2019-04-08 16:30:58,653: +PUB [/tf] /vrpn_client_node http://fscmontreal:40187/
+[rosmaster.master][INFO] 2019-04-08 16:30:58,741: publisherUpdate[/vrpn_client_node/ARdrone/pose] -> http://fscmontreal:35125/ ['http://fscmontreal:40187/']
+[rosmaster.master][INFO] 2019-04-08 16:30:58,744: publisherUpdate[/vrpn_client_node/ARdrone/pose] -> http://fscmontreal:35125/ ['http://fscmontreal:40187/']: sec=0.00, result=[1, '', 0]
+[rosmaster.master][INFO] 2019-04-08 16:31:01,849: -PUB [/rosout] /vrpn_client_node http://fscmontreal:40187/
+[rosmaster.master][INFO] 2019-04-08 16:31:01,850: -PUB [/vrpn_client_node/ARdrone/pose] /vrpn_client_node http://fscmontreal:40187/
+[rosmaster.master][INFO] 2019-04-08 16:31:01,851: -PUB [/tf] /vrpn_client_node http://fscmontreal:40187/
+[rosmaster.master][INFO] 2019-04-08 16:31:01,852: -SERVICE [/vrpn_client_node/get_loggers] /vrpn_client_node rosrpc://fscmontreal:57405
+[rosmaster.master][INFO] 2019-04-08 16:31:01,853: -SERVICE [/vrpn_client_node/set_logger_level] /vrpn_client_node rosrpc://fscmontreal:57405
+[rosmaster.master][INFO] 2019-04-08 16:31:01,947: publisherUpdate[/rosout] -> http://fscmontreal:39409/ ['http://fscmontreal:35125/']
+[rosmaster.master][INFO] 2019-04-08 16:31:01,947: publisherUpdate[/vrpn_client_node/ARdrone/pose] -> http://fscmontreal:35125/ []
+[rosmaster.master][INFO] 2019-04-08 16:31:01,948: publisherUpdate[/vrpn_client_node/ARdrone/pose] -> http://fscmontreal:35125/ []: sec=0.00, result=[0, 'Unknown Error', 0]
+[rosmaster.master][INFO] 2019-04-08 16:31:01,948: publisherUpdate[/rosout] -> http://fscmontreal:39409/ ['http://fscmontreal:35125/']: sec=0.00, result=[1, '', 0]
+[rosmaster.master][INFO] 2019-04-08 16:31:02,049: -PUB [/rosout] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:31:02,051: -PUB [/ardrone/takeoff] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:31:02,052: -PUB [/ardrone/land] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:31:02,053: -PUB [/ardrone/reset] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:31:02,054: -PUB [/cmd_vel] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:31:02,055: -SUB [/vrpn_client_node/ARdrone/pose] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:31:02,057: -SUB [/ardrone/navdata] /ARdronePID http://fscmontreal:35125/
+[rosmaster.master][INFO] 2019-04-08 16:31:02,058: -SERVICE [/ARdronePID/get_loggers] /ARdronePID rosrpc://fscmontreal:52224
+[rosmaster.master][INFO] 2019-04-08 16:31:02,059: -SERVICE [/ARdronePID/set_logger_level] /ARdronePID rosrpc://fscmontreal:52224
+[rosmaster.master][INFO] 2019-04-08 16:31:02,149: publisherUpdate[/rosout] -> http://fscmontreal:39409/ []
+[rosmaster.master][INFO] 2019-04-08 16:31:02,150: publisherUpdate[/rosout] -> http://fscmontreal:39409/ []: sec=0.00, result=[1, '', 0]
+[rosmaster.master][INFO] 2019-04-08 16:31:02,451: -PUB [/rosout_agg] /rosout http://fscmontreal:39409/
+[rosmaster.master][INFO] 2019-04-08 16:31:02,452: -SUB [/rosout] /rosout http://fscmontreal:39409/
+[rosmaster.master][INFO] 2019-04-08 16:31:02,453: -SERVICE [/rosout/get_loggers] /rosout rosrpc://fscmontreal:53327
+[rosmaster.master][INFO] 2019-04-08 16:31:02,453: -SERVICE [/rosout/set_logger_level] /rosout rosrpc://fscmontreal:53327
+[rosmaster.main][INFO] 2019-04-08 16:31:02,466: keyboard interrupt, will exit
+[rosmaster.main][INFO] 2019-04-08 16:31:02,467: stopping master...
+[rospy.core][INFO] 2019-04-08 16:31:02,467: signal_shutdown [atexit]

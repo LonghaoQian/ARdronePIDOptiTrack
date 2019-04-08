@@ -1,0 +1,6 @@
+[0m[ INFO] [1554755695.278282528]: Connecting to VRPN server at 169.254.1.1:3883[0m
+[0m[ INFO] [1554755695.287964647]: Connection established[0m
+[0m[ INFO] [1554755696.291544898]: Found new sender: Trackable 1[0m
+[0m[ INFO] [1554755696.291657296]: Creating new tracker Trackable1[0m
+[0m[ INFO] [1554755696.297868125]: Found new sender: ARdrone[0m
+[0m[ INFO] [1554755696.297928260]: Creating new tracker ARdrone[0m

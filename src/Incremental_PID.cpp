@@ -110,16 +110,16 @@ double Incremental_PID::GetPIDOutPut()
 
     double u= u_k;
     // determine whether the PID has reached a preset bound
-    if(u_k-upperlimit>0)
-    {
-        u = upperlimit;// limit the magnitude
-        pid_flag = 2;
-    }
-    if(lowerlimit-u_k>0)
-    {
-        u = lowerlimit;// limit the magnitude
-        pid_flag = 2;
-    }
+//    if(u_k-upperlimit>0)
+//    {
+//        u = upperlimit;// limit the magnitude
+//        pid_flag = 2;
+//    }
+//    if(lowerlimit-u_k>0)
+//    {
+//        u = lowerlimit;// limit the magnitude
+//        pid_flag = 2;
+//    }
 
     return u;
 }

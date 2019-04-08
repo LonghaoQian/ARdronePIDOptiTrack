@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     SignalGenerator sig_1;
     SignalGenerator vertial_signal;
     double Control_Rate = 40;// Hz the rate
-    double SquareWaveTime = 40;// Time for the signal generator
+    double SquareWaveTime = 70;// Time for the signal generator
     double SquareWaveAmplitude = 0.3;//m/s amplitude for square waves
     double SquareWaveFrequency = 0.25;//Frequency of the square wave
     double SignalOutput = 0;
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     double yaw_angle_cmd = 0;
     double yaw_error;
     double vz_error;
-    double command_altitue = 1.2;
+    double command_altitue = 1;
     double command_x = 0;
     double command_z = 0;
     double z_error = 0;
@@ -146,8 +146,8 @@ int main(int argc, char **argv)
       // Transfer velocity and poisiton
       s_x_b = s_x_w*cos(-euler_optitrack[2])+s_y_w*sin(-euler_optitrack[2]);
       s_y_b = -s_x_w*sin(-euler_optitrack[2])+s_y_w*cos(-euler_optitrack[2]);
-      horizontal_x_pid.RosWhileLoopRun(-s_x_b);
-      horizontal_z_pid.RosWhileLoopRun(-s_y_b);
+      horizontal_x_pid.RosWhileLoopRun(s_x_b);
+      horizontal_z_pid.RosWhileLoopRun(s_y_b);
       // Altitude Control Loop
       // vz_error = SignalOutput - OpTiFeedback.GetVelocity().vy;
       // vertical_speed_pid.RosWhileLoopRun(vz_error);

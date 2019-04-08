@@ -1,0 +1,61 @@
+
+
+1554755457.602096732  Node Startup
+1554755457.633716489 INFO [/tmp/binarydeb/ros-kinetic-vrpn-client-ros-0.2.2/src/vrpn_client_ros.cpp:345(VrpnClientRos::VrpnClientRos) [topics: /rosout] Connection established
+1554755457.699797533 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755457.699843677 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755457.699889517 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:995(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] No OptiTrack Data Feed
+1554755458.449713150 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755458.449754298 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755458.638080616 INFO [/tmp/binarydeb/ros-kinetic-vrpn-client-ros-0.2.2/src/vrpn_client_ros.cpp:407(VrpnClientRos::updateTrackers) [topics: /rosout] Found new sender: Trackable 1
+1554755458.638206583 INFO [/tmp/binarydeb/ros-kinetic-vrpn-client-ros-0.2.2/src/vrpn_client_ros.cpp:94(VrpnTrackerRos::init) [topics: /rosout] Creating new tracker Trackable1
+1554755458.645545693 INFO [/tmp/binarydeb/ros-kinetic-vrpn-client-ros-0.2.2/src/vrpn_client_ros.cpp:407(VrpnClientRos::updateTrackers) [topics: /rosout] Found new sender: ARdrone
+1554755458.645609982 INFO [/tmp/binarydeb/ros-kinetic-vrpn-client-ros-0.2.2/src/vrpn_client_ros.cpp:94(VrpnTrackerRos::init) [topics: /rosout] Creating new tracker ARdrone
+1554755458.449776332 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:995(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] No OptiTrack Data Feed
+1554755458.649714167 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755458.649755087 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755458.649782522 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:995(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] No OptiTrack Data Feed
+1554755458.849718805 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755458.849758215 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755458.849780346 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:995(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] No OptiTrack Data Feed
+1554755459.049729070 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755459.049768934 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755459.049796914 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:992(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] OptiTrack Normal
+1554755459.199691169 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755459.199730537 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755459.199762497 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:992(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] OptiTrack Normal
+1554755459.374715870 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755459.374754037 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755459.374775198 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:992(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] OptiTrack Normal
+1554755459.624713409 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755459.624751949 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755459.624773624 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:992(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] OptiTrack Normal
+1554755459.824715840 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755459.824752188 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755459.824773614 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:992(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] OptiTrack Normal
+1554755459.974711204 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755459.974754975 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755459.974786945 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:992(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] OptiTrack Normal
+1554755460.124702741 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755460.124740758 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755460.124763022 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:992(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] OptiTrack Normal
+1554755460.299702093 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755460.299742699 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755460.299766489 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:992(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] OptiTrack Normal
+1554755460.474703472 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755460.474744874 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755460.474766270 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:992(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] OptiTrack Normal
+1554755460.624715311 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755460.624751874 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755460.624772823 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:992(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] OptiTrack Normal
+1554755460.749705606 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755460.749741322 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755460.749760550 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:992(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] OptiTrack Normal
+1554755460.924714560 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755460.924750721 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755460.924770298 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:992(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] OptiTrack Normal
+1554755461.049725933 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755461.049766643 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
+1554755461.049789174 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:992(KeybordEvent) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] OptiTrack Normal
+1554755461.199691366 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:223(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Unknown
+1554755461.199731617 INFO [/home/longhao/catkin_ws/src/ARdronePIDOptiTrack/src/ARdronePID_old.cpp:253(GetDroneState) [topics: /rosout, /ardrone/takeoff, /ardrone/land, /ardrone/reset, /cmd_vel] Battery precent is: [0.000000]
