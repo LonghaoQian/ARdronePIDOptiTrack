@@ -1,20 +1,16 @@
 #include "DataRecorder.h"
-void DataRecorder::DataRecorder()
+DataRecorder::DataRecorder(const char* name,unsigned int ud, double controlrate)
 {
-
+  filename = name;
+  numbe_of_column = ud;
+  state = 0;
+  delta_T = 1/controlrate;
+  recordingtime=0;
+  //name a file
+  file.open(filename, std::ofstream::out);
+  file.close();
 }
 
-void DataRecorder::Initialize(const char* name,unsigned int ud, double controlrate)
-{
-    filename = name;
-    numbe_of_column = ud;
-    state = 0;
-    delta_T = 1/controlrate;
-    recordingtime=0;
-    //name a file
-    file.open(filename, std::ofstream::out);
-    file.close();
-}
 void DataRecorder::StartRecording()
 {
     state = 1;
@@ -39,7 +35,7 @@ void DataRecorder::StopRecording()
     file.close();
 }
 
-void DataRecorder::~DataRecorder()
+DataRecorder::~DataRecorder()
 {
     file.close();
 }

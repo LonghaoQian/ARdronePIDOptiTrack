@@ -1,15 +1,9 @@
 #include "KeyboardEvent.h"
 
-void KeyboardEvent::KeyboardEvent()
+KeyboardEvent::KeyboardEvent()
 {
     input_flag = -1;
     buff = 0;
-}
-void KeyboardEvent::PushCallBack(char keynumber,void(*callback)(void))
-{
-    callbacklist.push_back(callback);
-    keynumberlist.push_back(keynumber);
-    number_of_callbacks = 0;
 }
 
 void KeyboardEvent::getch()
@@ -55,27 +49,20 @@ void KeyboardEvent::getch()
     if (tcsetattr(filedesc, TCSADRAIN, &old) < 0)
             ROS_ERROR ("tcsetattr ~ICANON");
 }
-
-void KeyboardEvent::KeyboardPress()
+char KeyboardEvent::GetPressedKey()
 {
-
+    char key;
     if(input_flag>-1)//if keyboard is pressed, then perform the callbacks
     {
-        for(int i = 0;i<number_of_callbacks;i++)
-        {
-            if(keynumberlist[i]==buff)// if the keyboard output matches the keynumberlist stored, then excute the function
-            {
-                callbacklist[i]();
-            }
-        }
+        key = buff;
+    }else{
+      key = U_KEY_NONE;
     }
+    return key;
 }
 void KeyboardEvent::RosWhileLoopRun()
 {
     getch();
-    KeyboardPress();
 }
-void KeyboardEvent::BendingComplete()
-{
-    number_of_callbacks = callbacklist.size();
-}
+int  KeyboardEvent::input_flag;
+char KeyboardEvent::buff;

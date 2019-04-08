@@ -33,6 +33,7 @@ class ARDroneCommand{
     void PushRawYawRate(double& newyawrate);// push newly measured velocity into raw velocity buffer
     void PushYawAngle();//push newly measured pose into dronepose buffer
 public:
+    ARDroneCommand();
     void Initialize(ros::NodeHandle& n,double Controlrate);
     // Basic Command Functions
     void TakeOFF();

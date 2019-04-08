@@ -66,7 +66,7 @@ find_package(catkin REQUIRED COMPONENTS
 # add_action_files(
 #  FILES
 #   Action1.action
-#   Action2.action
+#   Action2.action///////////////////////////// Keyboard Command ///////////////////////////////
 # )
 
 ## Generate added messages and services with any dependencies listed here
@@ -202,6 +202,18 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(ardrone_pid_v1 src/ARdronePID_old.cpp)
+add_executable(ardrone_pid_v1 src/ardrone_pid_v1.cpp)
 target_link_libraries(ardrone_pid_v1 ${catkin_LIBRARIES})
+add_library(SignalGenerator src/SignalGenerator.cpp)
+target_link_libraries(ardrone_pid_v1 SignalGenerator)
+add_library(OptiTrackFeedback src/OptiTrackFeedback.cpp)
+target_link_libraries(ardrone_pid_v1 OptiTrackFeedback)
+add_library(KeyboardEvent src/KeyboardEvent.cpp)
+target_link_libraries(ardrone_pid_v1 KeyboardEvent)
+add_library(Incremental_PID src/Incremental_PID.cpp)
+target_link_libraries(ardrone_pid_v1 Incremental_PID)
+add_library(DataRecorder src/DataRecorder.cpp)
+target_link_libraries(ardrone_pid_v1 DataRecorder)
+add_library(ARDroneCommand src/ARDroneCommand.cpp)
+target_link_libraries(ardrone_pid_v1 ARDroneCommand)
 add_dependencies(ardrone_pid_v1 ARdronePIDOptiTrack_generate_messages_cpp)

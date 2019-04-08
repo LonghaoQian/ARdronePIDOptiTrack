@@ -1,4 +1,5 @@
 #pragma once
+#include "ros/ros.h"
 #ifndef M_PI
 # define M_PI       3.14159265358979323846  /* pi */
 #endif
@@ -12,6 +13,7 @@ class SignalGenerator{
     double angularrate;        //angular velocity of the signal
     double signalvalue;        //signal output value
 public:
+    SignalGenerator();
     void Initialize(double SquareDuration,double SquareWaveAmplitude,double SquareWaveFrequency, double Rosrate);
     void Stop();
     void Start();

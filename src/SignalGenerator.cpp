@@ -1,6 +1,6 @@
 #include "SignalGenerator.h"
 
-void SignalGenerator::SignalGenerator()
+SignalGenerator::SignalGenerator()
 {
 
 }

@@ -2,6 +2,7 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+using namespace std;
 
 class DataRecorder{
     int state;                     //recorder state
@@ -11,8 +12,9 @@ class DataRecorder{
     double recordingtime;          // recordingtime
     ofstream file;                 //file object that store the
 public:
+    DataRecorder(const char* name,unsigned int ud, double controlrate);
+    ~DataRecorder();
     void StartRecording();
     void RecorderUpdate(double* data);
     void StopRecording();
-    void Initialize(const char* name,unsigned int ud, double controlrate);
 };

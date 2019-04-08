@@ -1,5 +1,5 @@
 #include "Incremental_PID.h"
-void Incremental_PID::Incremental_PID()
+Incremental_PID::Incremental_PID()
 {
 
 }

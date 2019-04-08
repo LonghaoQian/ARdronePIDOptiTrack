@@ -1,5 +1,5 @@
 #pragma once
-
+#include "ros/ros.h"
 ////////////////////////////// Incremental PID /////////////////////////////
 class Incremental_PID{
     /* single channel digital pid controller
@@ -19,6 +19,7 @@ class Incremental_PID{
     void PID_update(double e);// control output update
     unsigned int pid_flag;//  flag 0: stop  1: running 2; fault
 public:
+    Incremental_PID();
     void Initialize(double controlrate, double kp, double kd, double ki, double upperlimit, double lowerlimit);//
     void Start();//start the controller
     void Stop(); //stop the controller

@@ -1,6 +1,4 @@
 #include "ros/ros.h"
-
-#include <termios.h>
 #include "ARDroneCommand.h"
 #include "SignalGenerator.h"
 #include "OptiTrackFeedback.h"
@@ -9,157 +7,8 @@
 #include "KeyboardEvent.h"
 using namespace std;
 
-int keyboard_input;
-
-///////////////////////////// Keyboard Command ///////////////////////////////
-//Get Keyboard Input
-char getch()
-{
-        keyboard_input = -1; //if not key is pressed, then return -1 for the keyboard_input. reset this flag every time
-        fd_set set;
-        struct timeval timeout;
-        int rv;
-        char buff = 0;
-        int len = 1;
-        int filedesc = 0;
-        FD_ZERO(&set);
-        FD_SET(filedesc, &set);
-
-        timeout.tv_sec = 0;
-        //timeout.tv_usec = 1000;//
-        timeout.tv_usec = 1000;
-        rv = select(filedesc + 1, &set, NULL, NULL, &timeout);
-
-        struct termios old = {0};
-        if (tcgetattr(filedesc, &old) < 0)
-                ROS_ERROR("tcsetattr()");
-        old.c_lflag &= ~ICANON;
-        old.c_lflag &= ~ECHO;
-        old.c_cc[VMIN] = 1;
-        old.c_cc[VTIME] = 0;
-        if (tcsetattr(filedesc, TCSANOW, &old) < 0)
-                ROS_ERROR("tcsetattr ICANON");
-
-        if(rv == -1){
-                ROS_ERROR("select");
-        }
-        else if(rv == 0)
-        {
-                //{ROS_INFO("-----");
-        }
-        else
-                {read(filedesc, &buff, len );
-        keyboard_input = 1;}
-
-        old.c_lflag |= ICANON;
-        old.c_lflag |= ECHO;
-        if (tcsetattr(filedesc, TCSADRAIN, &old) < 0)
-                ROS_ERROR ("tcsetattr ~ICANON");
-        return (buff);
-}
-// Initialize all the stuff
-void Initialization()
-{
-    keyboard_input = -1;
-}
-
-
-
-
-
-void KeybordEvent(char buff,ARDroneCommand& comchannel,
-                  SignalGenerator& signal,
-                  DataRecorder& recorder,
-                  OptiTrackFeedback& optitrack,
-                  Incremental_PID& yaw_rate_pid,
-                  Incremental_PID& vertical_speed_pid,
-                  Incremental_PID& x_speed_pid,
-                  Incremental_PID& z_speed_pid)
-{
-    if(keyboard_input>-1)//if keyboard is
-    {
-        switch(buff)
-               {/*t*/case 116: {
-                    comchannel.TakeOFF();
-                        ROS_INFO("TakeOFF_command_sent");}
-                     break;
-            /*Space*/case 32:
-                    {
-                        signal.Stop();
-                        recorder.StopRecording();
-                        comchannel.Land();
-                        yaw_rate_pid.Stop();
-                        vertical_speed_pid.Stop();
-                        x_speed_pid.Stop();
-                        x_speed_pid.Reset();
-                        z_speed_pid.Stop();
-                        z_speed_pid.Reset();
-                        ROS_INFO("Land");
-                    }
-                     break;
-                /*r*/case 114: {
-                        comchannel.Reset();
-                        ROS_INFO("Reset_command_sent");
-                        comchannel.GetDroneState();
-                     }
-                     break;
-                /*w*/case 119:
-                     {
-                        signal.Start();
-                        recorder.StartRecording();
-                        yaw_rate_pid.Start();
-                        vertical_speed_pid.Start();
-                         x_speed_pid.Start();
-                          z_speed_pid.Start();
-                        ROS_INFO("Start Test");
-                     }
-                     break;
-                /*s*/case 115:
-                     {
-                        signal.Stop();
-                        recorder.StopRecording();
-                        yaw_rate_pid.Stop();
-                        yaw_rate_pid.Reset();
-                        vertical_speed_pid.Stop();
-                        vertical_speed_pid.Reset();
-                        x_speed_pid.Stop();
-                        x_speed_pid.Reset();
-                        z_speed_pid.Stop();
-                        z_speed_pid.Reset();
-                        ROS_INFO("End Test");
-                     }
-                     break;
-                /*q*/case 113:{
-                               comchannel.GetDroneState();
-                               signal.GetSignalStatus();
-                               if(optitrack.GetOptiTrackState()==1)
-                               {
-                                   ROS_INFO("OptiTrack Normal");
-                               }else{
-
-                                   ROS_INFO("No OptiTrack Data Feed");
-                               }
-
-                                }
-                     break;
-                /*e*/case 101: comchannel.Stop();
-                     break;
-
-
-              }
-
-    }else
-    { // do nothing if keyboard is not pressed
-    }
-
-
-}
-
-
-
 int main(int argc, char **argv)
 {
-  //Initialization custom function
     SignalGenerator sig_1;
     SignalGenerator vertial_signal;
     double Control_Rate = 40;// Hz the rate
@@ -169,13 +18,13 @@ int main(int argc, char **argv)
     double SignalOutput = 0;
     sig_1.Initialize(SquareWaveTime,SquareWaveAmplitude,SquareWaveFrequency,Control_Rate);
     vertial_signal.Initialize(SquareWaveTime,SquareWaveAmplitude,SquareWaveFrequency,Control_Rate);
-  // Initialize ros node
+    // Initialize ros node
     ros::init(argc, argv, "ardrone_pid_v1");
     ros::NodeHandle n;
     // Initialize OptiTrack System
     OptiTrackFeedback OpTiFeedback;
     OpTiFeedback.Initialize(n);
-  // ARDrone class
+    // ARDrone class
     ARDroneCommand comchannel_1;
     comchannel_1.Initialize(n,Control_Rate);
     // PID control
@@ -190,12 +39,17 @@ int main(int argc, char **argv)
     horizontal_x_pid.Initialize(Control_Rate,0.25,0,0,1,-1);
     horizontal_z_pid.Initialize(Control_Rate,0.25,0,0,1,-1);
     // Initialize Data Recorder
-    DataRecorder psi_recorder;
-    DataRecorder velocity_recorder;
-    psi_recorder.Initialize("psi_data.txt",6,Control_Rate);
-    velocity_recorder.Initialize("vz_data.txt",4,Control_Rate);
-    double data[6];
-    double dataz[4];
+    DataRecorder dronestate_recorder("ARdroneState.txt",16,Control_Rate);
+    double dronestate[16];
+    /*  0 reference signal
+        1 - 3 drone positition from OpTiFeedback (hx,hy,Altitude)
+        4 - 6 drone filtered velocity from OpTiFeedback
+        7 - 9 drone PID position control inputs
+        10 - 12 drone raw velocity from OpTiFeedback
+        13 drone yaw angles for OpTiFeedback
+        14 drone yaw pif control inputs
+        15 error signal
+     */
     double yaw_angle_cmd = 0;
     double yaw_error;
     double vz_error;
@@ -210,84 +64,83 @@ int main(int argc, char **argv)
     double s_y_w = 0;
     double s_x_b = 0;
     double s_y_b = 0;
-    // x and y poistion error
     KeyboardEvent keyboardcontrol;
-    keyboardcontrol.PushCallBack(116,comchannel_1.TakeOFF());  /*t*/
-    keyboardcontrol.PushCallBack(32, signal.Stop());  /*Space*/
-    keyboardcontrol.PushCallBack(32, recorder.StopRecording());  /*Space*/
-    keyboardcontrol.PushCallBack(32, comchannel.Land();  /*Space*/
-
-
-    yaw_rate_pid.Stop();
-    vertical_speed_pid.Stop();
-    x_speed_pid.Stop();
-    x_speed_pid.Reset();
-    z_speed_pid.Stop();
-    z_speed_pid.Reset();
-
-
-    keyboardcontrol.PushCallBack(114,comchannel_1.TakeOFF());  /*r*/
-    keyboardcontrol.PushCallBack(119,comchannel_1.TakeOFF());  /*w*/
-    keyboardcontrol.PushCallBack(115,comchannel_1.TakeOFF());  /*s*/
-    keyboardcontrol.PushCallBack(113,comchannel_1.TakeOFF());  /*q*/
-    keyboardcontrol.PushCallBack(101,comchannel_1.TakeOFF());  /*e*/
-    keyboardcontrol.BendingComplete();
-// Set Ros Excution Rate
     ros::Rate loop_rate(Control_Rate);
-    velocity_recorder.StartRecording();
-    //double yaw_ref = 70;
   while (ros::ok())
   {
-
-      //////////////////////////////// Fix this part with QT library later /////////////////////
+      keyboardcontrol.RosWhileLoopRun();
+      switch (keyboardcontrol.GetPressedKey())
+      {
+        case U_KEY_T:
+        {
+          comchannel_1.TakeOFF();
+          break;
+        }
+        case U_KEY_W:
+        {
+            dronestate_recorder.StartRecording();
+            sig_1.Start();
+            horizontal_x_pid.Start();
+            horizontal_z_pid.Start();
+            vertical_speed_pid.Start();
+            yaw_rate_pid.Start();
+            break;
+        }
+        case U_KEY_S:
+        {
+          sig_1.Stop();
+          dronestate_recorder.StopRecording();
+          horizontal_x_pid.Stop();
+          horizontal_x_pid.Reset();
+          horizontal_z_pid.Stop();
+          horizontal_z_pid.Reset();
+          vertical_speed_pid.Stop();
+          vertical_speed_pid.Reset();
+          yaw_rate_pid.Stop();
+          yaw_rate_pid.Reset();
+          break;
+        }
+        case U_KEY_Q:
+        {
+           comchannel_1.GetDroneState();
+           OpTiFeedback.GetOptiTrackState();
+           break;
+        }
+        case U_KEY_SPACE:
+        {
+          comchannel_1.Land();
+          sig_1.Stop();
+          dronestate_recorder.StopRecording();
+          break;
+        }
+        case U_KEY_R:
+        {
+          comchannel_1.Reset();
+          break;
+        }
+        case U_KEY_NONE:
+        {
+          break;
+        }
+      }
+      // update sginal generator
       SignalOutput = sig_1.RunTimeUpdate();
-      // send commands
-      comchannel_1.VelocityCommandUpdate(horizontal_x_pid.GetPIDOutPut(),-horizontal_z_pid.GetPIDOutPut(),vertical_speed_pid.GetPIDOutPut(),yaw_rate_pid.GetPIDOutPut());
-      data[1] = yaw_rate_pid.GetPIDOutPut();
-      comchannel_1.RosWhileLoopRun();// flush the commands and calculations
 
-      //ROS_INFO("Signal is [%f]", SignalOutput);
+      // send commands to ARDrone
+      comchannel_1.VelocityCommandUpdate(
+      horizontal_x_pid.GetPIDOutPut(),
+      -horizontal_z_pid.GetPIDOutPut(),
+      vertical_speed_pid.GetPIDOutPut(),
+      yaw_rate_pid.GetPIDOutPut());
+
+      comchannel_1.RosWhileLoopRun();
       ros::spinOnce();// do the loop once
       OpTiFeedback.RosWhileLoopRun();
-      // Yaw control loop:
       //yaw_error = SignalOutput*100 - comchannel_1.GetYawRate();// rate control
-      //yaw_error = comchannel_1.Rad2Deg(comchannel_1.AngularError(comchannel_1.Deg2Rad(yaw_angle_cmd),comchannel_1.Deg2Rad(comchannel_1.GetDroneYaw())));// angle control
+      OpTiFeedback.GetEulerAngleFromQuaterion_OptiTrackYUpConvention(euler_optitrack);// get body angles
       yaw_error = comchannel_1.Rad2Deg(comchannel_1.AngularError(comchannel_1.Deg2Rad(yaw_angle_cmd),euler_optitrack[2]));// angle from optitrack
       yaw_rate_pid.RosWhileLoopRun(yaw_error/100);// push error into pid
-      // Altitude Control Loop
-//      vz_error = SignalOutput - OpTiFeedback.GetVelocity().vy;
-//      vertical_speed_pid.RosWhileLoopRun(vz_error);
-
-      z_error =  OpTiFeedback.GetPose().y - command_altitue;
-      vz_error = -0.8*z_error-OpTiFeedback.GetVelocity().vy;
-      vertical_speed_pid.RosWhileLoopRun(vz_error);// use s.
-
-      //save data
-      if(sig_1.GetSignalStatus()==0)
-      {
-          psi_recorder.StopRecording();
-      }
-      data[0] = SignalOutput;
-
-      data[2] = comchannel_1.GetYawRate();
-      data[3] = comchannel_1.GetRawYawRate();
-      data[4] = comchannel_1.GetDroneYaw();
-      data[5] = yaw_error;
-      psi_recorder.RecorderUpdate(data);
-
-      // z loop:
-      if(sig_1.GetSignalStatus()==0)
-      {
-          velocity_recorder.StopRecording();
-      }
-      dataz[0] = SignalOutput;
-      dataz[1] = OpTiFeedback.GetPose().y;
-      dataz[2] = OpTiFeedback.GetRaWVelocity().vy;
-      dataz[3] = OpTiFeedback.GetVelocity().vy;
-      velocity_recorder.RecorderUpdate(dataz);
-      // Get body angles
-      OpTiFeedback.GetEulerAngleFromQuaterion_OptiTrackYUpConvention(euler_optitrack);
-      // Horizontal r
+      // Horizontal position errors
       s_x_w = ke*(OpTiFeedback.GetPose().x -command_x)+OpTiFeedback.GetVelocity().vx;
       s_y_w = ke*(OpTiFeedback.GetPose().z -command_z)+OpTiFeedback.GetVelocity().vz;
       // Transfer velocity and poisiton
@@ -295,14 +148,40 @@ int main(int argc, char **argv)
       s_y_b = -s_x_w*sin(-euler_optitrack[2])+s_y_w*cos(-euler_optitrack[2]);
       horizontal_x_pid.RosWhileLoopRun(-s_x_b);
       horizontal_z_pid.RosWhileLoopRun(-s_y_b);
+      // Altitude Control Loop
+      // vz_error = SignalOutput - OpTiFeedback.GetVelocity().vy;
+      // vertical_speed_pid.RosWhileLoopRun(vz_error);
 
-      //ROS_INFO("yaw angle is [%f] x position error is [%f] z position error is [%f]",euler_optitrack[2]*57.3,s_x_b,s_y_b);
-      // loop wait
+      z_error =  OpTiFeedback.GetPose().y - command_altitue;
+      vz_error = -0.8*z_error-OpTiFeedback.GetVelocity().vy;
+      vertical_speed_pid.RosWhileLoopRun(vz_error);// use s
+
+      //save data
+      if(sig_1.GetSignalStatus()==0)
+      {
+          dronestate_recorder.StopRecording();// if the signal stops, then stop recording
+
+      }else{
+        dronestate[0] = SignalOutput;
+        dronestate[1] = OpTiFeedback.GetPose().x;
+        dronestate[2] = OpTiFeedback.GetPose().y;
+        dronestate[3] = OpTiFeedback.GetPose().z;
+        dronestate[4] = OpTiFeedback.GetVelocity().vx;
+        dronestate[5] = OpTiFeedback.GetVelocity().vy;
+        dronestate[6] = OpTiFeedback.GetVelocity().vz;
+        dronestate[7] = horizontal_x_pid.GetPIDOutPut();
+        dronestate[8] = -horizontal_z_pid.GetPIDOutPut();
+        dronestate[9] = vertical_speed_pid.GetPIDOutPut();
+        dronestate[10] = OpTiFeedback.GetRaWVelocity().vx;
+        dronestate[11] = OpTiFeedback.GetRaWVelocity().vy;
+        dronestate[12] = OpTiFeedback.GetRaWVelocity().vz;
+        dronestate[13] = euler_optitrack[2];
+        dronestate[14] = yaw_rate_pid.GetPIDOutPut();
+        dronestate[15] = z_error;// change this according to control task
+        dronestate_recorder.RecorderUpdate(dronestate);
+      }
       loop_rate.sleep();
 
   }
-  velocity_recorder.StopRecording();
-  //pubLand.publish(landing_);// after the
   return 0;
 }
-

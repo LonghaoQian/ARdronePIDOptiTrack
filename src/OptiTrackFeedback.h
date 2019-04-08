@@ -43,6 +43,7 @@ class OptiTrackFeedback{
     void PushPose();//push newly measured pose into dronepose buffer
     void SetZeroVelocity();
 public:
+    OptiTrackFeedback();
     void Initialize(ros::NodeHandle& n);
     int GetOptiTrackState();
     opitrack_velocity GetVelocity();

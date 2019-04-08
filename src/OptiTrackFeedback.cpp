@@ -1,6 +1,6 @@
 #include "OptiTrackFeedback.h"
 
-void OptiTrackFeedback::OptiTrackFeedback()
+OptiTrackFeedback::OptiTrackFeedback()
 {
 
 }
@@ -196,7 +196,13 @@ void OptiTrackFeedback::RosWhileLoopRun()
 }
 int OptiTrackFeedback::GetOptiTrackState()
 {
+    if (FeedbackState==1) {
+      ROS_INFO("OptiTrack:Normal");
+    }else{
+      ROS_INFO("OptiTrack:No FeedBack");
+    }
     return FeedbackState;
+
 }
 void OptiTrackFeedback::GetEulerAngleFromQuaterion_NormalConvention(double (&eulerangle)[3])
 {
@@ -265,5 +271,6 @@ void OptiTrackFeedback::OptiTrackCallback(const geometry_msgs::PoseStamped& msg)
         OptiTrackdata = msg; // update optitrack data
         OptiTrackFlag = 1;// signal a new measurement feed has been revcieved.
 }
-//geometry_msgs::PoseStamped OptiTrackFeedback::OptiTrackdata;//declare optitrack data
-//unsigned int OptiTrackFeedback::OptiTrackFlag;// optitrack flag
+// declare static member variables
+geometry_msgs::PoseStamped OptiTrackFeedback::OptiTrackdata;
+unsigned int OptiTrackFeedback::OptiTrackFlag;

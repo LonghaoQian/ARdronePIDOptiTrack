@@ -1,6 +1,6 @@
 #include "ARDroneCommand.h"
 
-void ARDroneCommand::ARDroneCommand()
+ARDroneCommand::ARDroneCommand()
 {
 
 }
@@ -26,15 +26,18 @@ void ARDroneCommand::Initialize(ros::NodeHandle& n,double Controlrate)
 void ARDroneCommand::Land()
 {
     pubLand.publish(landing_);
+    ROS_INFO("landing Command Sent");
 }
 void ARDroneCommand::TakeOFF()
 {
     //This function will only perform take_off when the navdata.state ==2 (Landed)
     if(navdata.state==2)
-    {pubTakeoff.publish(takeoff_);}
+    {pubTakeoff.publish(takeoff_);
+      ROS_INFO("TakeOFF Command Sent");}
 }
 void ARDroneCommand::Reset()
-{pubReset.publish(reset_);}
+{pubReset.publish(reset_);
+ROS_INFO("Reset Command Sent");}
 void  ARDroneCommand::VelocityCommandUpdate(double vx,double vy,double vz,double az)
 {
     command_.linear.x = vx;
@@ -57,37 +60,37 @@ void ARDroneCommand::GetDroneState()
     switch(navdata.state)
     {
     case 0:
-        ROS_INFO("Unknown");
+        ROS_INFO("ARdrone:Unknown");
         break;
     case 1:
-        ROS_INFO("Init");
+        ROS_INFO("ARdrone:Init");
         break;
     case 2:
-        ROS_INFO("Landed");
+        ROS_INFO("ARdrone:Landed");
         break;
     case 3:
-        ROS_INFO("Flying");
+        ROS_INFO("ARdrone:Flying");
         break;
     case 4:
-        ROS_INFO("Hovering");
+        ROS_INFO("ARdrone:Hovering");
         break;
     case 5:
-        ROS_INFO("Test");
+        ROS_INFO("ARdrone:Test");
         break;
     case 6:
-        ROS_INFO("Test");
+        ROS_INFO("ARdrone:Test");
         break;
     case 7:
-        ROS_INFO("Goto Fix Point");
+        ROS_INFO("ARdrone:Goto Fix Point");
         break;
     case 8:
-        ROS_INFO("Landing");
+        ROS_INFO("ARdrone:Landing");
         break;
     case 9:
-        ROS_INFO("Looping");
+        ROS_INFO("ARdrone:Looping");
         break;
     }
-    ROS_INFO("Battery precent is: [%f]",navdata.batteryPercent);
+    ROS_INFO("ARdrone:Battery precent is: [%f]",navdata.batteryPercent);
 }
 void ARDroneCommand::RosWhileLoopRun()
 {
@@ -196,4 +199,4 @@ void ARDroneCommand::ReceiveNavdata(const ardrone_autonomy::Navdata& Navmsg)
 {
         navdata = Navmsg; // update navdata
 }
-//ardrone_autonomy::Navdata ARDroneCommand::navdata; //declare the static variable
+ardrone_autonomy::Navdata ARDroneCommand::navdata; //declare the static variable
