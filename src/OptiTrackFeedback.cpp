@@ -8,7 +8,7 @@ OptiTrackFeedback::OptiTrackFeedback()
 
 void OptiTrackFeedback::Initialize(ros::NodeHandle& n)
 {
-    subOptiTrack = n.subscribe("vrpn_client_node/ARdrone/pose", 1, this->OptiTrackCallback);
+    subOptiTrack = n.subscribe("/vrpn_client_node/RigidBody1/pose", 1, this->OptiTrackCallback);
     //Initialize all velocity
     for(int i =0;i<windowsize;i++)
     {

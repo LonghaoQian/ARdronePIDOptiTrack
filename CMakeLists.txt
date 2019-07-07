@@ -203,17 +203,30 @@ include_directories(
 # catkin_add_nosetests(test)
 
 add_executable(ardrone_pid_v1 src/ardrone_pid_v1.cpp)
-target_link_libraries(ardrone_pid_v1 ${catkin_LIBRARIES})
-add_library(SignalGenerator src/SignalGenerator.cpp)
-target_link_libraries(ardrone_pid_v1 SignalGenerator)
-add_library(OptiTrackFeedback src/OptiTrackFeedback.cpp)
-target_link_libraries(ardrone_pid_v1 OptiTrackFeedback)
-add_library(KeyboardEvent src/KeyboardEvent.cpp)
-target_link_libraries(ardrone_pid_v1 KeyboardEvent)
-add_library(Incremental_PID src/Incremental_PID.cpp)
-target_link_libraries(ardrone_pid_v1 Incremental_PID)
-add_library(DataRecorder src/DataRecorder.cpp)
-target_link_libraries(ardrone_pid_v1 DataRecorder)
-add_library(ARDroneCommand src/ARDroneCommand.cpp)
-target_link_libraries(ardrone_pid_v1 ARDroneCommand)
 add_dependencies(ardrone_pid_v1 ARdronePIDOptiTrack_generate_messages_cpp)
+target_link_libraries(ardrone_pid_v1 ${catkin_LIBRARIES})
+
+add_library(SignalGenerator src/SignalGenerator.cpp)
+add_library(OptiTrackFeedback src/OptiTrackFeedback.cpp)
+add_library(KeyboardEvent src/KeyboardEvent.cpp)
+add_library(Incremental_PID src/Incremental_PID.cpp)
+add_library(DataRecorder src/DataRecorder.cpp)
+add_library(ARDroneCommand src/ARDroneCommand.cpp)
+add_library(OptiTrackFeedbackRigidBody src/OptiTrackFeedBackRigidBody.cpp)
+
+target_link_libraries(ardrone_pid_v1 SignalGenerator)
+target_link_libraries(ardrone_pid_v1 OptiTrackFeedback)
+target_link_libraries(ardrone_pid_v1 KeyboardEvent)
+target_link_libraries(ardrone_pid_v1 Incremental_PID)
+target_link_libraries(ardrone_pid_v1 DataRecorder)
+target_link_libraries(ardrone_pid_v1 ARDroneCommand)
+
+
+add_executable(OptiTrackTest src/OptiTrackTest.cpp)
+add_dependencies(OptiTrackTest ARdronePIDOptiTrack_generate_messages_cpp)
+target_link_libraries(OptiTrackTest ${catkin_LIBRARIES})
+target_link_libraries(OptiTrackTest OptiTrackFeedbackRigidBody)
+target_link_libraries(OptiTrackTest KeyboardEvent)
+
+
+
