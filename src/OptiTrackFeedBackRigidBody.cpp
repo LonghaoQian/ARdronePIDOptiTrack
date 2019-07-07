@@ -1,26 +1,40 @@
 #include "OptiTrackFeedBackRigidBody.h"
 
-OptiTrackFeedBackRigidBody::OptiTrackFeedBackRigidBody(const char* name,ros::NodeHandle& n)
+OptiTrackFeedBackRigidBody::OptiTrackFeedBackRigidBody(const char* name,ros::NodeHandle& n,unsigned int linear_window, unsigned int angular_window)
 {
+    // load filter window size
+    linear_velocity_window = linear_window;
+    angular_velocity_window = angular_window;
+    if(linear_velocity_window>max_windowsize)
+    {
+        ROS_INFO("Linear Velocity Window Size Overlimit, Max Value is [%d]",max_windowsize);
+        ROS_INFO("Input Valude is [%d]",linear_velocity_window);
+        linear_velocity_window = max_windowsize;
+    }
+    if(angular_velocity_window>max_windowsize)
+    {
+        ROS_INFO("Angular Velocity Window Size Overlimit, Max Value is [%d]",max_windowsize);
+        ROS_INFO("Input Valude is [%d]",angular_velocity_window);
+        angular_velocity_window = max_windowsize;
+    }
+    // set up subscriber to vrpn optitrack beedback
     subOptiTrack = n.subscribe(name, 1, &OptiTrackFeedBackRigidBody::OptiTrackCallback,this);
     //Initialize all velocity
-    for(int i =0;i<windowsize;i++)
+    for(int i =0;i<max_windowsize;i++)
     {
-        velocity_raw[i].omega_x = 0;
-        velocity_raw[i].omega_y = 0;
-        velocity_raw[i].omega_z = 0;
-        velocity_raw[i].time_stamp = 0;
-        velocity_raw[i].vx=0;
-        velocity_raw[i].vy=0;
-        velocity_raw[i].vz=0;
+        velocity_raw[i](1)=0;
+        velocity_raw[i](2)=0;
+        velocity_raw[i](3)=0;
+        angular_velocity_raw[i](1)=0;
+        angular_velocity_raw[i](2)=0;
+        angular_velocity_raw[i](3)=0;
     }
-    velocity_filtered.omega_x=0;
-    velocity_filtered.omega_y=0;
-    velocity_filtered.omega_z=0;
-    velocity_filtered.time_stamp=0;
-    velocity_filtered.vx=0;
-    velocity_filtered.vy=0;
-    velocity_filtered.vz=0;
+    velocity_filtered(1)=0;
+    velocity_filtered(2)=0;
+    velocity_filtered(3)=0;
+    angular_velocity_filtered(1)=0;
+    angular_velocity_filtered(2)=0;
+    angular_velocity_filtered(3)=0;
     //Initialize all pose
     for(int i = 0;i<2;i++)
     {
@@ -29,10 +43,21 @@ OptiTrackFeedBackRigidBody::OptiTrackFeedBackRigidBody(const char* name,ros::Nod
         pose[i].q2 = 0;
         pose[i].q3 = 0;
         pose[i].t = 0;
-        pose[i].x = 0;
-        pose[i].y = 0;
-        pose[i].z = 0;
-
+        pose[i].Position(1) = 0;
+        pose[i].Position(2) = 0;
+        pose[i].Position(3) = 0;
+        pose[i].L<< 0,1,0,0,
+                    0,0,1,0,
+                    0,0,0,1;
+        pose[i].R<< 0,1,0,0,
+                    0,0,1,0,
+                    0,0,0,1;   
+        pose[1].R_IB<< 1,0,0,
+                    0,1,0,
+                    0,0,1;
+        pose[1].R_BI<< 1,0,0,
+                    0,1,0,
+                    0,0,1;                    
     }
     // Initialize flag
     OptiTrackFlag = 0;
@@ -44,43 +69,39 @@ void OptiTrackFeedBackRigidBody::CalculateVelocityFromPose()
 
     /* Logic:
      * 1) push the current pose into buffer
-     * 2) determine whether the buffer has a valid time value  (dronepose[0].t >0); if so calculate velocity
+     * 2) determine whether the buffer has a valid time value  (pose[0].t >0); if so calculate velocity
      * 3) if not just set the velocity_onestep as zero
      * 4) push current time, and velocity_onestep into the velocity buffer
-     * 5) calculate filtered velocity
+     * 5) update the filtered velocity
     */
     // perform the Logic:
     // step (1): push the current pose into buffer
     PushPose();
-    // step (2): determine whether the buffer has a valid time value  (dronepose[0].t >0); if so calculate velocity
+    // step (2): determine whether the buffer has a valid time value  (pose[0].t >0); if so calculate velocity
     double dt = 0.0;
-    opitrack_velocity velocity_onestep;
+    Vector3d velocity_onestep;
+    Vector3d angular_velocity_onestep;
   if (pose[0].t >0)// calculate only when last time stamp has been recorded.
   {
       // step (2)
       dt = pose[1].t - pose[0].t;// time step
-      // calculate x direction velocity
-      velocity_onestep.vx = (pose[1].x - pose[0].x)/dt;
-      velocity_onestep.vy = (pose[1].y - pose[0].y)/dt;
-      velocity_onestep.vz = (pose[1].z - pose[0].z)/dt;
-      // will add rotation speed later
-      velocity_onestep.omega_x = 0;
-      velocity_onestep.omega_y = 0;
-      velocity_onestep.omega_z = 0;
-  }else// step (3): if not set velocity to zero and only record the time
+      // calculate linear velocity
+      velocity_onestep = (pose[1].Position- pose[0].Position)/dt;
+      // calculate angular velocity
+      Matrix3d RotationDifference = pose[1].R_BI*pose[0].R_IB/dt;//verify !!!
+      Veemap(RotationDifference,angular_velocity_onestep);
+  }else// step (3): if not set velocity to zero
   {
-      velocity_onestep.vx = 0.0;
-      velocity_onestep.vy = 0.0;
-      velocity_onestep.vz = 0.0;
-      velocity_onestep.omega_x = 0;
-      velocity_onestep.omega_y = 0;
-      velocity_onestep.omega_z = 0;
-      // will add rotation speed later
+      velocity_onestep(1) = 0.0;
+      velocity_onestep(2) = 0.0;
+      velocity_onestep(3) = 0.0;
+      angular_velocity_onestep(1) = 0.0;
+      angular_velocity_onestep(2) = 0.0;
+      angular_velocity_onestep(3) = 0.0;
   }
-  velocity_onestep.time_stamp = pose[1].t;
   // step (4): push current time, and velocity_onestep into the velocity buffer
-  PushRawVelocity(velocity_onestep);
-  // step (5): calculate filtered velocity
+  PushRawVelocity(velocity_onestep,angular_velocity_onestep);
+  // step (5): update filtered velocity
   MovingWindowAveraging();
 }
 void OptiTrackFeedBackRigidBody::PushPose()
@@ -94,24 +115,73 @@ void OptiTrackFeedBackRigidBody::PushPose()
     pose[1].q1 = OptiTrackdata.pose.orientation.x;
     pose[1].q2 = OptiTrackdata.pose.orientation.y;
     pose[1].q3 = OptiTrackdata.pose.orientation.z;
-    // pose is straight forward
-    pose[1].x =  OptiTrackdata.pose.position.x;
-    pose[1].y =  OptiTrackdata.pose.position.y;
-    pose[1].z =  OptiTrackdata.pose.position.z;
+    // update the auxiliary matrix
+    /*
+    L = [-q1 q0 q3 -q2;
+         -q2 -q3 q0 q1;
+         -q3 q2 -q1 q0]
+    R = [-q1 q0 -q3 q2;
+         -q2 q3 q0 -q1;
+         -q3 -q2 q1 q0]
+    R_IB = RL^T
+    */
+    pose[1].L(1,1) = - pose[1].q1;
+    pose[1].L(2,1) = - pose[1].q2;
+    pose[1].L(3,1) = - pose[1].q3;
+
+    pose[1].L(1,2) = pose[1].q0;
+    pose[1].L(2,3) = pose[1].q0;
+    pose[1].L(3,4) = pose[1].q0;
+
+    pose[1].L(1,3) = pose[1].q3;
+    pose[1].L(1,4) = - pose[1].q2;
+    pose[1].L(2,2) = - pose[1].q3;
+    pose[1].L(2,4) = pose[1].q1;
+    pose[1].L(3,2) = pose[1].q2;
+    pose[1].L(3,3) = - pose[1].q1;
+
+    pose[1].R(1,1) = - pose[1].q1;
+    pose[1].R(2,1) = - pose[1].q2;
+    pose[1].R(3,1) = - pose[1].q3;
+
+    pose[1].R(1,2) = pose[1].q0;
+    pose[1].R(2,3) = pose[1].q0;
+    pose[1].R(3,4) = pose[1].q0;
+
+    pose[1].L(1,3) = -pose[1].q3;
+    pose[1].L(1,4) =  pose[1].q2;
+    pose[1].L(2,2) =  pose[1].q3;
+    pose[1].L(2,4) = -pose[1].q1;
+    pose[1].L(3,2) = -pose[1].q2;
+    pose[1].L(3,3) =  pose[1].q1; 
+
+    pose[1].R_IB = pose[1].R * pose[1].L.transpose();
+    pose[1].R_BI = pose[1].R_IB.transpose();
+    // position is straight forward
+    pose[1].Position(1) =  OptiTrackdata.pose.position.x;
+    pose[1].Position(2) =  OptiTrackdata.pose.position.y;
+    pose[1].Position(3) =  OptiTrackdata.pose.position.z;
 }
 
-void OptiTrackFeedBackRigidBody::PushRawVelocity(opitrack_velocity& newvelocity)
+void OptiTrackFeedBackRigidBody::PushRawVelocity(Vector3d& new_linear_velocity, Vector3d& new_angular_velocity)
 {
     /* Logic:
      * a(i-1) = a(i), i = 2...windowsize
      * should fristly start from  i = 2. a(1) = a(2); a(2) = a(3);....; a(N-1) = a(N)
      * secondly a(N) = a_new
     */
-    for(int i = 1;i<windowsize;i++)//first step
+   // linear velocity
+    for(int i = 1;i<linear_velocity_window;i++)//first step
     {
         velocity_raw[i-1] = velocity_raw[i];
     }
-    velocity_raw[windowsize-1] = newvelocity;// second step update the last variable in the velocity buffer
+    velocity_raw[linear_velocity_window-1] = new_linear_velocity;// second step update the last variable in the velocity buffer
+    // angular velocity
+    for(int i = 1;i<angular_velocity_window;i++)//first step
+    {
+        angular_velocity_raw[i-1] = angular_velocity_raw[i];
+    }
+    angular_velocity_raw[angular_velocity_window-1] = new_angular_velocity;// second step update the last variable in the velocity buffer   
 }
 
 void OptiTrackFeedBackRigidBody::MovingWindowAveraging()
@@ -119,60 +189,66 @@ void OptiTrackFeedBackRigidBody::MovingWindowAveraging()
 
     /* Logic: Average the raw velocity measurement in the
     */
-    double weight = (double)1/windowsize;// the weight on each velocity to be summed up.
+    double weight_linear = (double)1/linear_velocity_window;// the weight on each velocity to be summed up.
+    double weight_angular = (double)1/angular_velocity_window;// the weight on each velocity to be summed up.
     // create a temporary variable to store the summed velocity and initialize it witht the 1st buffer value
-    opitrack_velocity velocitytemp;
-    velocitytemp.omega_x= weight*velocity_raw[0].omega_x;
-    velocitytemp.omega_y= weight*velocity_raw[0].omega_y;
-    velocitytemp.omega_z= weight*velocity_raw[0].omega_z;
-    velocitytemp.vx = weight*velocity_raw[0].vx;
-    velocitytemp.vy = weight*velocity_raw[0].vy;
-    velocitytemp.vz = weight*velocity_raw[0].vz;
+    Vector3d velocitytemp;
+    Vector3d angular_velocitytemp;
+    velocitytemp = weight_linear*velocity_raw[0];
+    angular_velocitytemp = weight_angular*angular_velocity_raw[0];
 
-    for(int i = 1;i<windowsize;i++)// sum starts from the second buffer value
+    for(int i = 1;i<linear_velocity_window;i++)// sum starts from the second buffer value
     {
-        velocitytemp.omega_x+= weight*velocity_raw[i].omega_x;
-        velocitytemp.omega_y+= weight*velocity_raw[i].omega_y;
-        velocitytemp.omega_z+= weight*velocity_raw[i].omega_z;
-        velocitytemp.vx += weight*velocity_raw[i].vx;
-        velocitytemp.vy += weight*velocity_raw[i].vy;
-        velocitytemp.vz += weight*velocity_raw[i].vz;
+        velocitytemp += weight_linear*velocity_raw[i];
     }
-    velocitytemp.time_stamp = velocity_raw[windowsize-1].time_stamp;
+    for(int i = 1;i<angular_velocity_window;i++)// sum starts from the second buffer value
+    {
+        angular_velocitytemp += weight_angular*angular_velocity_raw[i];
+    }
     // the filtered vlocity is just the weighted summed result
     velocity_filtered = velocitytemp;
+    angular_velocity_filtered = angular_velocitytemp;
 }
 
-opitrack_pose OptiTrackFeedBackRigidBody::GetPose()
+void OptiTrackFeedBackRigidBody::GetState(rigidbody_state& state)
 {
-    return pose[1];//return the latest pose
+    state.time_stamp = pose[1].t;
+    state.V_I = velocity_filtered;
+    state.Omega_BI = angular_velocity_filtered;
+    Hatmap(state.Omega_BI,state.Omega_Cross);
+    state.R_IB = pose[1].R_IB;
+    state.R_BI = pose[1].R_BI; 
+    double euler_temp[3];
+    GetEulerAngleFromQuaterion_NormalConvention(euler_temp);
+    state.Euler(1) = euler_temp[0];// euler angle
+    state.Euler(2) = euler_temp[1];// euler angle
+    state.Euler(3) = euler_temp[2];// euler angle
 }
-
-opitrack_velocity OptiTrackFeedBackRigidBody::GetVelocity()
+void OptiTrackFeedBackRigidBody::GetRaWVelocity(Vector3d& linear_velocity,Vector3d& angular_velocity)
 {
-    return velocity_filtered;// return the filtered velocity
-}
-opitrack_velocity OptiTrackFeedBackRigidBody::GetRaWVelocity()
-{
-    return velocity_raw[windowsize-1];// return the filtered velocity
+    linear_velocity = velocity_raw[linear_velocity_window-1];// return the filtered velocity
+    angular_velocity = angular_velocity_raw[angular_velocity_window-1];// return the filtered velocity
 }
 void  OptiTrackFeedBackRigidBody::SetZeroVelocity()
 {
-    for(int i =0;i<windowsize;i++)
+    for(int i =0;i<linear_velocity_window;i++)
     {
-        velocity_raw[i].omega_x = 0;
-        velocity_raw[i].omega_y = 0;
-        velocity_raw[i].omega_z = 0;
-        velocity_raw[i].vx=0;
-        velocity_raw[i].vy=0;
-        velocity_raw[i].vz=0;
+        velocity_raw[i](1)=0;
+        velocity_raw[i](2)=0;
+        velocity_raw[i](3)=0;
     }
-    velocity_filtered.omega_x=0;
-    velocity_filtered.omega_y=0;
-    velocity_filtered.omega_z=0;
-    velocity_filtered.vx=0;
-    velocity_filtered.vy=0;
-    velocity_filtered.vz=0;
+    for(int i =0;i<angular_velocity_window;i++)
+    {
+        angular_velocity_raw[i](1)=0;
+        angular_velocity_raw[i](2)=0;
+        angular_velocity_raw[i](3)=0;
+    }
+    velocity_filtered(1)=0;
+    velocity_filtered(2)=0;
+    velocity_filtered(3)=0;
+    angular_velocity_filtered(1) =0;
+    angular_velocity_filtered(2) =0;
+    angular_velocity_filtered(3) =0;
 }
 
 void OptiTrackFeedBackRigidBody::RosWhileLoopRun()
@@ -196,8 +272,9 @@ int OptiTrackFeedBackRigidBody::GetOptiTrackState()
     }else{
       ROS_INFO("OptiTrack:No FeedBack");
     }
+    ROS_INFO("Linear Velocity Filter Window Size is [%d]",linear_velocity_window);
+    ROS_INFO("Angular Velocity Filter Window Size is [%d]",angular_velocity_window);
     return FeedbackState;
-
 }
 void OptiTrackFeedBackRigidBody::GetEulerAngleFromQuaterion_NormalConvention(double (&eulerangle)[3])
 {
@@ -267,6 +344,37 @@ void OptiTrackFeedBackRigidBody::OptiTrackCallback(const geometry_msgs::PoseStam
         OptiTrackdata = msg; // update optitrack data
         OptiTrackFlag = 1;// signal a new measurement feed has been revcieved.
 }
-// declare static member variables
-//geometry_msgs::PoseStamped OptiTrackFeedBackRigidBody::OptiTrackdata;
-//unsigned int OptiTrackFeedBackRigidBody::OptiTrackFlag;
+
+OptiTrackFeedBackRigidBody::~OptiTrackFeedBackRigidBody()
+{
+
+}
+
+void OptiTrackFeedBackRigidBody::Veemap(Matrix3d& cross_matrix, Vector3d& vector)
+{
+    vector(1) = -cross_matrix(2,3);
+    vector(2) = cross_matrix(1,3);
+    vector(3) = -cross_matrix(1,2);
+}
+void OptiTrackFeedBackRigidBody::Hatmap(Vector3d& vector, Matrix3d& cross_matrix)
+{
+    /*
+
+    r^x = [0 -r3 r2;
+           r3 0 -r1;
+          -r2 r1 0]
+    */
+    
+    cross_matrix(1,1) = 0.0;
+    cross_matrix(1,2) = - vector(3);
+    cross_matrix(1,3) = vector(2);
+
+    cross_matrix(2,1) = vector(3);
+    cross_matrix(2,2) = 0.0;
+    cross_matrix(2,3) = - vector(1);
+
+    cross_matrix(3,1) = - vector(2);
+    cross_matrix(3,2) = vector(1);
+    cross_matrix(3,3) = 0.0;
+
+}

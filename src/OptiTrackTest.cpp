@@ -12,8 +12,8 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "OptiTrackTest");
     ros::NodeHandle n;
     // Initialize OptiTrack System
-    OptiTrackFeedBackRigidBody Opti_RigidBody1("/vrpn_client_node/RigidBody1/pose",n);
-    OptiTrackFeedBackRigidBody Opti_RigidBody2("/vrpn_client_node/RigidBody2/pose",n);
+    OptiTrackFeedBackRigidBody Opti_RigidBody1("/vrpn_client_node/RigidBody1/pose",n,3,3);
+    OptiTrackFeedBackRigidBody Opti_RigidBody2("/vrpn_client_node/RigidBody2/pose",n,3,3);
     KeyboardEvent keyboardcontrol;
     ros::Rate loop_rate(Control_Rate);
   while (ros::ok())
@@ -28,8 +28,8 @@ int main(int argc, char **argv)
         {
            Opti_RigidBody1.GetOptiTrackState();
            Opti_RigidBody2.GetOptiTrackState();
-           ROS_INFO("Rigidbody 1 Position [%f]",Opti_RigidBody1.GetPose().x);
-           ROS_INFO("Rigidbody 1 Position [%f]",Opti_RigidBody2.GetPose().x);
+           ///ROS_INFO("Rigidbody 1 Position [%f]",Opti_RigidBody1.GetPose().x);
+           //ROS_INFO("Rigidbody 1 Position [%f]",Opti_RigidBody2.GetPose().x);
            break;
         }
         case U_KEY_NONE:
