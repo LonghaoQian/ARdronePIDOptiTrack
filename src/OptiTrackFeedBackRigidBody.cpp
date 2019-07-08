@@ -22,19 +22,19 @@ OptiTrackFeedBackRigidBody::OptiTrackFeedBackRigidBody(const char* name,ros::Nod
     //Initialize all velocity
     for(int i =0;i<max_windowsize;i++)
     {
+        velocity_raw[i](0)=0;
         velocity_raw[i](1)=0;
         velocity_raw[i](2)=0;
-        velocity_raw[i](3)=0;
+        angular_velocity_raw[i](0)=0;
         angular_velocity_raw[i](1)=0;
         angular_velocity_raw[i](2)=0;
-        angular_velocity_raw[i](3)=0;
     }
+    velocity_filtered(0)=0;
     velocity_filtered(1)=0;
     velocity_filtered(2)=0;
-    velocity_filtered(3)=0;
+    angular_velocity_filtered(0)=0;
     angular_velocity_filtered(1)=0;
     angular_velocity_filtered(2)=0;
-    angular_velocity_filtered(3)=0;
     //Initialize all pose
     for(int i = 0;i<2;i++)
     {
@@ -43,9 +43,9 @@ OptiTrackFeedBackRigidBody::OptiTrackFeedBackRigidBody(const char* name,ros::Nod
         pose[i].q2 = 0;
         pose[i].q3 = 0;
         pose[i].t = 0;
+        pose[i].Position(0) = 0;
         pose[i].Position(1) = 0;
         pose[i].Position(2) = 0;
-        pose[i].Position(3) = 0;
         pose[i].L<< 0,1,0,0,
                     0,0,1,0,
                     0,0,0,1;
@@ -92,12 +92,12 @@ void OptiTrackFeedBackRigidBody::CalculateVelocityFromPose()
       Veemap(RotationDifference,angular_velocity_onestep);
   }else// step (3): if not set velocity to zero
   {
+      velocity_onestep(0) = 0.0;
       velocity_onestep(1) = 0.0;
       velocity_onestep(2) = 0.0;
-      velocity_onestep(3) = 0.0;
+      angular_velocity_onestep(0) = 0.0;
       angular_velocity_onestep(1) = 0.0;
       angular_velocity_onestep(2) = 0.0;
-      angular_velocity_onestep(3) = 0.0;
   }
   // step (4): push current time, and velocity_onestep into the velocity buffer
   PushRawVelocity(velocity_onestep,angular_velocity_onestep);
@@ -125,42 +125,42 @@ void OptiTrackFeedBackRigidBody::PushPose()
          -q3 -q2 q1 q0]
     R_IB = RL^T
     */
-    pose[1].L(1,1) = - pose[1].q1;
-    pose[1].L(2,1) = - pose[1].q2;
-    pose[1].L(3,1) = - pose[1].q3;
+    pose[1].L(0,0) = - pose[1].q1;
+    pose[1].L(1,0) = - pose[1].q2;
+    pose[1].L(2,0) = - pose[1].q3;
 
+    pose[1].L(0,1) = pose[1].q0;
     pose[1].L(1,2) = pose[1].q0;
     pose[1].L(2,3) = pose[1].q0;
-    pose[1].L(3,4) = pose[1].q0;
 
-    pose[1].L(1,3) = pose[1].q3;
-    pose[1].L(1,4) = - pose[1].q2;
-    pose[1].L(2,2) = - pose[1].q3;
-    pose[1].L(2,4) = pose[1].q1;
-    pose[1].L(3,2) = pose[1].q2;
-    pose[1].L(3,3) = - pose[1].q1;
+    pose[1].L(0,2) = pose[1].q3;
+    pose[1].L(0,3) = - pose[1].q2;
+    pose[1].L(1,1) = - pose[1].q3;
+    pose[1].L(1,3) = pose[1].q1;
+    pose[1].L(2,1) = pose[1].q2;
+    pose[1].L(2,2) = - pose[1].q1;
 
-    pose[1].R(1,1) = - pose[1].q1;
-    pose[1].R(2,1) = - pose[1].q2;
-    pose[1].R(3,1) = - pose[1].q3;
+    pose[1].R(0,0) = - pose[1].q1;
+    pose[1].R(1,0) = - pose[1].q2;
+    pose[1].R(2,0) = - pose[1].q3;
 
+    pose[1].R(0,1) = pose[1].q0;
     pose[1].R(1,2) = pose[1].q0;
     pose[1].R(2,3) = pose[1].q0;
-    pose[1].R(3,4) = pose[1].q0;
 
-    pose[1].L(1,3) = -pose[1].q3;
-    pose[1].L(1,4) =  pose[1].q2;
-    pose[1].L(2,2) =  pose[1].q3;
-    pose[1].L(2,4) = -pose[1].q1;
-    pose[1].L(3,2) = -pose[1].q2;
-    pose[1].L(3,3) =  pose[1].q1; 
+    pose[1].R(0,2) = -pose[1].q3;
+    pose[1].R(0,3) =  pose[1].q2;
+    pose[1].R(1,1) =  pose[1].q3;
+    pose[1].R(1,3) = -pose[1].q1;
+    pose[1].R(2,1) = -pose[1].q2;
+    pose[1].R(2,2) =  pose[1].q1; 
 
     pose[1].R_IB = pose[1].R * pose[1].L.transpose();
     pose[1].R_BI = pose[1].R_IB.transpose();
     // position is straight forward
-    pose[1].Position(1) =  OptiTrackdata.pose.position.x;
-    pose[1].Position(2) =  OptiTrackdata.pose.position.y;
-    pose[1].Position(3) =  OptiTrackdata.pose.position.z;
+    pose[1].Position(0) =  OptiTrackdata.pose.position.x;
+    pose[1].Position(1) =  OptiTrackdata.pose.position.y;
+    pose[1].Position(2) =  OptiTrackdata.pose.position.z;
 }
 
 void OptiTrackFeedBackRigidBody::PushRawVelocity(Vector3d& new_linear_velocity, Vector3d& new_angular_velocity)
@@ -213,6 +213,7 @@ void OptiTrackFeedBackRigidBody::MovingWindowAveraging()
 void OptiTrackFeedBackRigidBody::GetState(rigidbody_state& state)
 {
     state.time_stamp = pose[1].t;
+    state.Position = pose[1].Position;
     state.V_I = velocity_filtered;
     state.Omega_BI = angular_velocity_filtered;
     Hatmap(state.Omega_BI,state.Omega_Cross);
@@ -220,9 +221,13 @@ void OptiTrackFeedBackRigidBody::GetState(rigidbody_state& state)
     state.R_BI = pose[1].R_BI; 
     double euler_temp[3];
     GetEulerAngleFromQuaterion_NormalConvention(euler_temp);
-    state.Euler(1) = euler_temp[0];// euler angle
-    state.Euler(2) = euler_temp[1];// euler angle
-    state.Euler(3) = euler_temp[2];// euler angle
+    state.Euler(0) = euler_temp[0];// euler angle
+    state.Euler(1) = euler_temp[1];// euler angle
+    state.Euler(2) = euler_temp[2];// euler angle
+    state.quaterion(0) = pose[1].q0;
+    state.quaterion(1) = pose[1].q1;
+    state.quaterion(2) = pose[1].q2;
+    state.quaterion(3) = pose[1].q3;
 }
 void OptiTrackFeedBackRigidBody::GetRaWVelocity(Vector3d& linear_velocity,Vector3d& angular_velocity)
 {
@@ -233,22 +238,22 @@ void  OptiTrackFeedBackRigidBody::SetZeroVelocity()
 {
     for(int i =0;i<linear_velocity_window;i++)
     {
+        velocity_raw[i](0)=0;
         velocity_raw[i](1)=0;
         velocity_raw[i](2)=0;
-        velocity_raw[i](3)=0;
     }
     for(int i =0;i<angular_velocity_window;i++)
     {
+        angular_velocity_raw[i](0)=0;
         angular_velocity_raw[i](1)=0;
         angular_velocity_raw[i](2)=0;
-        angular_velocity_raw[i](3)=0;
     }
+    velocity_filtered(0)=0;
     velocity_filtered(1)=0;
     velocity_filtered(2)=0;
-    velocity_filtered(3)=0;
+    angular_velocity_filtered(0) =0;
     angular_velocity_filtered(1) =0;
     angular_velocity_filtered(2) =0;
-    angular_velocity_filtered(3) =0;
 }
 
 void OptiTrackFeedBackRigidBody::RosWhileLoopRun()
@@ -314,7 +319,7 @@ void OptiTrackFeedBackRigidBody::GetEulerAngleFromQuaterion_NormalConvention(dou
 void OptiTrackFeedBackRigidBody::GetEulerAngleFromQuaterion_OptiTrackYUpConvention(double (&eulerangle)[3])
 {
 
-    // OptiTrack gives a quaternion with q2 and q3 flipped.
+    // OptiTrack gives a quaternion with q2 and q3 flipped. (and sign flipped for q3)
     // roll (x-axis rotation)
     double sinr_cosp = +2.0 * (pose[1].q0 * pose[1].q1 + pose[1].q3 * pose[1].q2);
     double cosr_cosp = +1.0 - 2.0 * (pose[1].q1 * pose[1].q1 +pose[1].q3 * pose[1].q3);
@@ -352,9 +357,9 @@ OptiTrackFeedBackRigidBody::~OptiTrackFeedBackRigidBody()
 
 void OptiTrackFeedBackRigidBody::Veemap(Matrix3d& cross_matrix, Vector3d& vector)
 {
-    vector(1) = -cross_matrix(2,3);
-    vector(2) = cross_matrix(1,3);
-    vector(3) = -cross_matrix(1,2);
+    vector(0) = -cross_matrix(1,2);
+    vector(1) = cross_matrix(0,2);
+    vector(2) = -cross_matrix(0,1);
 }
 void OptiTrackFeedBackRigidBody::Hatmap(Vector3d& vector, Matrix3d& cross_matrix)
 {
@@ -365,16 +370,16 @@ void OptiTrackFeedBackRigidBody::Hatmap(Vector3d& vector, Matrix3d& cross_matrix
           -r2 r1 0]
     */
     
+    cross_matrix(0,0) = 0.0;
+    cross_matrix(0,1) = - vector(2);
+    cross_matrix(0,2) = vector(1);
+
+    cross_matrix(1,0) = vector(2);
     cross_matrix(1,1) = 0.0;
-    cross_matrix(1,2) = - vector(3);
-    cross_matrix(1,3) = vector(2);
+    cross_matrix(1,2) = - vector(0);
 
-    cross_matrix(2,1) = vector(3);
+    cross_matrix(2,0) = - vector(1);
+    cross_matrix(2,1) = vector(0);
     cross_matrix(2,2) = 0.0;
-    cross_matrix(2,3) = - vector(1);
-
-    cross_matrix(3,1) = - vector(2);
-    cross_matrix(3,2) = vector(1);
-    cross_matrix(3,3) = 0.0;
 
 }

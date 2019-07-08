@@ -25,12 +25,14 @@ struct optitrack_pose{
 };
 
 struct rigidbody_state{
+    Vector4d quaterion;
+    Vector3d Position;// inertial position
     Vector3d V_I; // inertial velocity
     Matrix3d Omega_Cross; // angular velocity skew
     Vector3d Omega_BI;// Frame B to Frame I expressed in Frame B
     Matrix3d R_IB; // rotation matrix
     Matrix3d R_BI; //
-    Matrix3d Euler;// euler angle
+    Vector3d Euler;// euler angle
     double time_stamp;
 };
 
