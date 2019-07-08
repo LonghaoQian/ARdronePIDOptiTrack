@@ -13,7 +13,7 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "OptiTrackTest");
     ros::NodeHandle n;
     // Initialize Data Recorder
-    //DataRecorder Rigidbody1_recorder("OptiTestRigidbody1.txt",16,Control_Rate);
+    //DataRecorder Rigidbody1_recorder("OptiTestRigidbody1.txt",31,Control_Rate);
         double Rigidbody1state[16];
     /*  0 OptTrack Flag
         1 - 3 Rigidbody1 positition from OpTiFeedback (hx,hy,Altitude)
@@ -24,10 +24,9 @@ int main(int argc, char **argv)
         16 - 18 Rigidbody1 euler angle from OpTiFeedback
         19 - 22 Rigidbody1 quaterion from OpTiFeedback
         23 - 31 Rigidbody1 Rotation matrix R_IB from OptiFeedback
-
      */
     // Initialize OptiTrack System
-    OptiTrackFeedBackRigidBody Opti_RigidBody1("/vrpn_client_node/UAV/pose",n,3,3);
+    OptiTrackFeedBackRigidBody Opti_RigidBody1("/vrpn_client_node/Test/pose",n,3,3);
     OptiTrackFeedBackRigidBody Opti_RigidBody2("/vrpn_client_node/RigidBody2/pose",n,3,3);
     KeyboardEvent keyboardcontrol;
     rigidbody_state RigidBody1state;
@@ -57,8 +56,6 @@ int main(int argc, char **argv)
            cout<< "Rigid 1 Rotation Test: \n" << RigidBody1state.R_IB * RigidBody1state.R_BI<< endl;
            cout<< "Rigid 1 Euler: \n" <<RigidBody1state.Euler*57.3<<endl;
            cout<< "Rigid 1 quaterion: \n" <<RigidBody1state.quaterion<<endl;
-           ///ROS_INFO("Rigidbody 1 Position [%f]",Opti_RigidBody1.GetPose().x);
-           //ROS_INFO("Rigidbody 1 Position [%f]",Opti_RigidBody2.GetPose().x);
            //Rigidbody1_recorder.StopRecording();
            break;
         }

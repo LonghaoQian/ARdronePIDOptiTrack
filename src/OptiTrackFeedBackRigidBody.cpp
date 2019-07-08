@@ -88,7 +88,7 @@ void OptiTrackFeedBackRigidBody::CalculateVelocityFromPose()
       // calculate linear velocity
       velocity_onestep = (pose[1].Position- pose[0].Position)/dt;
       // calculate angular velocity
-      Matrix3d RotationDifference = pose[1].R_BI*pose[0].R_IB/dt;//verify !!!
+      Matrix3d RotationDifference = - pose[1].R_BI*pose[0].R_IB/dt;
       Veemap(RotationDifference,angular_velocity_onestep);
   }else// step (3): if not set velocity to zero
   {
