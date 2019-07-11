@@ -355,13 +355,13 @@ OptiTrackFeedBackRigidBody::~OptiTrackFeedBackRigidBody()
 
 }
 
-void OptiTrackFeedBackRigidBody::Veemap(Matrix3d& cross_matrix, Vector3d& vector)
+void OptiTrackFeedBackRigidBody::Veemap(const Matrix3d& cross_matrix, Vector3d& vector)
 {
     vector(0) = -cross_matrix(1,2);
     vector(1) = cross_matrix(0,2);
     vector(2) = -cross_matrix(0,1);
 }
-void OptiTrackFeedBackRigidBody::Hatmap(Vector3d& vector, Matrix3d& cross_matrix)
+void OptiTrackFeedBackRigidBody::Hatmap(const Vector3d& vector, Matrix3d& cross_matrix)
 {
     /*
 

@@ -62,8 +62,6 @@ class OptiTrackFeedBackRigidBody{
     void PushRawVelocity(Vector3d& new_linear_velocity, Vector3d& new_angular_velocity);// push newly measured velocity into raw velocity buffer
     void PushPose();//push newly measured pose into dronepose buffer
     void SetZeroVelocity();
-    //--------Update Rigid-body State ------//
-    rigidbody_state state;
 public:
     OptiTrackFeedBackRigidBody(const char* name,ros::NodeHandle& n, unsigned int linear_window, unsigned int angular_window);
     ~OptiTrackFeedBackRigidBody();
@@ -73,6 +71,6 @@ public:
     void RosWhileLoopRun();// This function should be put into ros while loop
     void GetEulerAngleFromQuaterion_NormalConvention(double (&eulerangle)[3]);
     void GetEulerAngleFromQuaterion_OptiTrackYUpConvention(double (&eulerangle)[3]);
-    void Veemap(Matrix3d& cross_matrix, Vector3d& vector);
-    void Hatmap(Vector3d& vector, Matrix3d& cross_matrix);
+    void Veemap(const Matrix3d& cross_matrix, Vector3d& vector);
+    void Hatmap(const Vector3d& vector, Matrix3d& cross_matrix);
 };
