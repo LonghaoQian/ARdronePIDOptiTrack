@@ -3,14 +3,13 @@
 #include "std_msgs/Empty.h"
 #include "geometry_msgs/Twist.h"
 #include "geometry_msgs/PoseStamped.h"
-//#include "UtilityFunctions.h"
+#include "UtilityFunctions.h"
 #include <Eigen/Eigen>
 //maximum window size
 #ifndef max_windowsize
 #define max_windowsize 10
 #endif
 using namespace Eigen;
-
 struct optitrack_pose{
     Vector3d Position;
     double q0;
@@ -71,6 +70,4 @@ public:
     void RosWhileLoopRun();// This function should be put into ros while loop
     void GetEulerAngleFromQuaterion_NormalConvention(double (&eulerangle)[3]);
     void GetEulerAngleFromQuaterion_OptiTrackYUpConvention(double (&eulerangle)[3]);
-    void Veemap(const Matrix3d& cross_matrix, Vector3d& vector);
-    void Hatmap(const Vector3d& vector, Matrix3d& cross_matrix);
 };

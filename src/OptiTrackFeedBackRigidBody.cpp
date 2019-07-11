@@ -17,7 +17,7 @@ OptiTrackFeedBackRigidBody::OptiTrackFeedBackRigidBody(const char* name,ros::Nod
         ROS_INFO("Input Valude is [%d]",angular_velocity_window);
         angular_velocity_window = max_windowsize;
     }
-    // set up subscriber to vrpn optitrack beedback
+    // set up subscriber to vrpn to receive optitrack beedback
     subOptiTrack = n.subscribe(name, 1, &OptiTrackFeedBackRigidBody::OptiTrackCallback,this);
     //Initialize all velocity
     for(int i =0;i<max_windowsize;i++)
@@ -89,7 +89,7 @@ void OptiTrackFeedBackRigidBody::CalculateVelocityFromPose()
       velocity_onestep = (pose[1].Position- pose[0].Position)/dt;
       // calculate angular velocity
       Matrix3d RotationDifference = - pose[1].R_BI*pose[0].R_IB/dt;
-      Veemap(RotationDifference,angular_velocity_onestep);
+      mathauxiliary::Veemap(RotationDifference,angular_velocity_onestep);
   }else// step (3): if not set velocity to zero
   {
       velocity_onestep(0) = 0.0;
@@ -216,7 +216,7 @@ void OptiTrackFeedBackRigidBody::GetState(rigidbody_state& state)
     state.Position = pose[1].Position;
     state.V_I = velocity_filtered;
     state.Omega_BI = angular_velocity_filtered;
-    Hatmap(state.Omega_BI,state.Omega_Cross);
+    mathauxiliary::Hatmap(state.Omega_BI,state.Omega_Cross);
     state.R_IB = pose[1].R_IB;
     state.R_BI = pose[1].R_BI; 
     double euler_temp[3];
@@ -287,11 +287,6 @@ void OptiTrackFeedBackRigidBody::GetEulerAngleFromQuaterion_NormalConvention(dou
 
     /* Normal means the following https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
     */
-//    eulerangle[0] = atan2(2.0 * (quat[3] * quat[2] + quat[0] * quat[1]), 1.0 - 2.0 * (quat[1] * quat[1] + quat[2] * quat[2]));
-//    eulerangle[1] = asin(2.0 * (quat[2] * quat[0] - quat[3] * quat[1]));
-//    eulerangle[2] = atan2(2.0 * (quat[3] * quat[0] + quat[1] * quat[2]), 1.0 - 2.0 * (quat[2] * quat[2] + quat[3] * quat[3]));
-
-
     // roll (x-axis rotation)
     double sinr_cosp = +2.0 * (pose[1].q0 * pose[1].q1 + pose[1].q2 * pose[1].q3);
     double cosr_cosp = +1.0 - 2.0 * (pose[1].q1 * pose[1].q1 +pose[1].q2 * pose[1].q2);
@@ -309,11 +304,9 @@ void OptiTrackFeedBackRigidBody::GetEulerAngleFromQuaterion_NormalConvention(dou
     double siny_cosp = +2.0 * (pose[1].q0 * pose[1].q3 + pose[1].q1 * pose[1].q2);
     double cosy_cosp = +1.0 - 2.0 * (pose[1].q2 * pose[1].q2 + pose[1].q3 * pose[1].q3);
     double yaw = atan2(siny_cosp, cosy_cosp);
-    //double yaw  = atan2(2.0 * (dronepose[1].q3 * dronepose[1].q0 + dronepose[1].q1 * dronepose[1].q2), -1.0 + 2.0 * (dronepose[1].q0 * dronepose[1].q0 + dronepose[1].q1 * dronepose[1].q1));
     eulerangle[0] = roll;
     eulerangle[1] = pitch;
     eulerangle[2] = yaw;
-
 }
 
 void OptiTrackFeedBackRigidBody::GetEulerAngleFromQuaterion_OptiTrackYUpConvention(double (&eulerangle)[3])
@@ -352,34 +345,5 @@ void OptiTrackFeedBackRigidBody::OptiTrackCallback(const geometry_msgs::PoseStam
 
 OptiTrackFeedBackRigidBody::~OptiTrackFeedBackRigidBody()
 {
-
-}
-
-void OptiTrackFeedBackRigidBody::Veemap(const Matrix3d& cross_matrix, Vector3d& vector)
-{
-    vector(0) = -cross_matrix(1,2);
-    vector(1) = cross_matrix(0,2);
-    vector(2) = -cross_matrix(0,1);
-}
-void OptiTrackFeedBackRigidBody::Hatmap(const Vector3d& vector, Matrix3d& cross_matrix)
-{
-    /*
-
-    r^x = [0 -r3 r2;
-           r3 0 -r1;
-          -r2 r1 0]
-    */
-    
-    cross_matrix(0,0) = 0.0;
-    cross_matrix(0,1) = - vector(2);
-    cross_matrix(0,2) = vector(1);
-
-    cross_matrix(1,0) = vector(2);
-    cross_matrix(1,1) = 0.0;
-    cross_matrix(1,2) = - vector(0);
-
-    cross_matrix(2,0) = - vector(1);
-    cross_matrix(2,1) = vector(0);
-    cross_matrix(2,2) = 0.0;
 
 }

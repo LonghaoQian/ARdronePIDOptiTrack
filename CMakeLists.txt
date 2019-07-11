@@ -121,7 +121,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -214,6 +214,7 @@ add_library(Incremental_PID src/Incremental_PID.cpp)
 add_library(DataRecorder src/DataRecorder.cpp)
 add_library(ARDroneCommand src/ARDroneCommand.cpp)
 add_library(OptiTrackFeedbackRigidBody src/OptiTrackFeedBackRigidBody.cpp)
+add_library(UtilityFunctions include/UtilityFunctions.h)
 
 target_link_libraries(ardrone_pid_v1 SignalGenerator)
 target_link_libraries(ardrone_pid_v1 OptiTrackFeedback)
@@ -228,6 +229,8 @@ add_dependencies(OptiTrackTest ARdronePIDOptiTrack_generate_messages_cpp)
 target_link_libraries(OptiTrackTest ${catkin_LIBRARIES})
 target_link_libraries(OptiTrackTest OptiTrackFeedbackRigidBody)
 target_link_libraries(OptiTrackTest KeyboardEvent)
+target_link_libraries(OptiTrackTest UtilityFunctions)
+set_target_properties(UtilityFunctions PROPERTIES LINKER_LANGUAGE CXX)
 
 
 
