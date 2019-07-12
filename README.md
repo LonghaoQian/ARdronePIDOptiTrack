@@ -1,4 +1,4 @@
-### ARdrone With PID Position Control and OptiTrack Feedback (C++)
+#### ARdrone With PID Position Control and OptiTrack Feedback (C++)
 ## Longhao Qian July 11th 2019
 
 This package requires ardrone_autonomy package:
@@ -49,5 +49,5 @@ Steps for launching the package:
 
 > `$ ROS_HOME=`pwd` roslaunch ARdronePIDOptiTrack ARdronePID.launch`
 
-`ROS_HOME=`pwd` is used so that the recorded file will be placed in the same folder as the node.
+ROS_HOME=`pwd` is used so that the recorded file will be placed in the same folder as the node.
 
