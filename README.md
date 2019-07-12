@@ -1,5 +1,6 @@
-#### ARdrone With PID Position Control and OptiTrack Feedback (C++)
-## Longhao Qian July 11th 2019
+## ARdrone With PID Position Control and OptiTrack Feedback (C++)
+
+**Longhao Qian July 11th 2019**
 
 This package requires ardrone_autonomy package:
 
