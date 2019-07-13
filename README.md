@@ -10,19 +10,19 @@ This package requires ardrone_autonomy package:
 
 Binary install:
 
-> `$ apt-get install ros-*-ardrone-autonomy`
+ `$ apt-get install ros-*-ardrone-autonomy`
 
 Compile from source:
 
-> `$ cd ~/catkin_ws/src`
+ `$ cd ~/catkin_ws/src`
 
-> `$ git clone https://github.com/AutonomyLab/ardrone_autonomy.git -b indigo-devel`
+ `$ git clone https://github.com/AutonomyLab/ardrone_autonomy.git -b indigo-devel`
 
-> `$ cd ~/catkin_ws`
+ `$ cd ~/catkin_ws`
 
-> `$ rosdep install --from-paths src -i`
+ `$ rosdep install --from-paths src -i`
 
-> `$ catkin_make`
+ `$ catkin_make`
 
 Steps for settiing up the wireless connections:
 
@@ -44,11 +44,11 @@ Steps for launching the package:
 
 1. launch the ardrone_autonomy package
 
-> `$ roslaunch ardrone_autonomy ardrone.launch`
+ `$ roslaunch ardrone_autonomy ardrone.launch`
 
 2. launch the control
 
-> `$ ROS_HOME=`pwd` roslaunch ARdronePIDOptiTrack ARdronePID.launch`
+ `$ ROS_HOME=`pwd` roslaunch ARdronePIDOptiTrack ARdronePID.launch`
 
 ROS_HOME=`pwd` is used so that the recorded file will be placed in the same folder as the node.
 
